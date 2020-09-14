@@ -1,15 +1,16 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(yolofast)
-
+add_definitions(-DOPENCV -Ofast)
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")  #设置c++的编译选项
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  #设置c的编译选项]
 set (PTREAD ${PROJECT_SOURCE_DIR}/src/yolofast/include/yolofast/3rdparty/pthreads)
-list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
@@ -18,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 #find_package(STB REQUIRED)
+find_package(OpenCV 2.4.9 REQUIRED)
 find_package(Threads)
 
 
@@ -123,6 +125,7 @@ include_directories(
  include/yolofast
  include/yolofast/3rdparty/stb/include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -156,6 +159,7 @@ aux_source_directory(./src dir_src) #指定路径，并产生变量${dir_src}
 target_link_libraries(darknet
    #${PTREAD}
    ${CMAKE_THREAD_LIBS_INIT}
+   ${OpenCV_LIBRARIES}
 )
 #############
 ## Install ##
