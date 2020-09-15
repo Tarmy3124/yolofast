@@ -19,6 +19,7 @@
 
 #include "http_stream.h"
 #include "image_opencv.h"
+//for ros
 static char **demo_names;
 static image **demo_alphabet;
 static int demo_classes;

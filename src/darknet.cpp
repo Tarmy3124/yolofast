@@ -12,7 +12,12 @@
 #include "blas.h"
 #include "connected_layer.h"
 
+//for ROS
+#include <ros/ros.h>
 
+
+extern "C"
+{
 extern void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top);
 extern void run_voxel(int argc, char **argv);
 extern void run_yolo(int argc, char **argv);
@@ -31,6 +36,7 @@ extern void run_cifar(int argc, char **argv);
 extern void run_go(int argc, char **argv);
 extern void run_art(int argc, char **argv);
 extern void run_super(int argc, char **argv);
+}
 
 void average(int argc, char *argv[])
 {
@@ -431,6 +437,7 @@ void visualize(char *cfgfile, char *weightfile)
 
 int main(int argc, char **argv)
 {
+ROS_INFO("hello tarmy");
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     printf(" _DEBUG is used \n");

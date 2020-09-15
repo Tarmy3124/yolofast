@@ -4,7 +4,7 @@ add_definitions(-DOPENCV -Ofast)
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")  #设置c++的编译选项
-set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  #设置c的编译选项]
+#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  #设置c的编译选项]
 set (PTREAD ${PROJECT_SOURCE_DIR}/src/yolofast/include/yolofast/3rdparty/pthreads)
 list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 ## Find catkin macros and libraries
@@ -158,6 +158,7 @@ aux_source_directory(./src dir_src) #指定路径，并产生变量${dir_src}
 ## Specify libraries to link a library or executable target against
 target_link_libraries(darknet
    #${PTREAD}
+   ${catkin_LIBRARIES}
    ${CMAKE_THREAD_LIBS_INIT}
    ${OpenCV_LIBRARIES}
 )
