@@ -67,7 +67,7 @@ void *fetch_in_thread(void *ptr)
         if (letter_box)
             in_s = get_image_from_stream_letterbox(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
         else
-         {   in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
+         {   in_s = get_image_from_stream_resize(NULL, net.w, net.h, net.c, &in_img, dont_close_stream);
         printf("Stream OK\n");}
         if (!in_s.data) {
             printf("Stream closed.\n");
@@ -168,12 +168,12 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         cap = get_capture_webcam(1);
     }
 
-    if (!cap) {
+  /*  if (!cap) {
 #ifdef WIN32
         printf("Check that you have copied file opencv_ffmpeg340_64.dll to the same directory where is darknet.exe \n");
 #endif
         error("Couldn't connect to webcam.\n");
-    }
+    }*/
 
     layer l = net.layers[net.n-1];
     int j;
@@ -226,7 +226,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     }
 
 
-    write_cv* output_video_writer = NULL;
+ /*   write_cv* output_video_writer = NULL;
     if (out_filename && !flag_exit)
     {
         int src_fps = 25;
@@ -241,7 +241,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         //'M', 'P', '4', '2'
         //'X', 'V', 'I', 'D'
         //'W', 'M', 'V', '2'
-    }
+    }*/
 
     int send_http_post_once = 0;
     const double start_time_lim = get_time_point();
@@ -302,7 +302,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
             printf("\nFPS:%.1f \t AVG_FPS:%.1f\n", fps, avg_fps);
 
-            if(!prefix){
+           if(!prefix){
                 if (!dont_show) {
                     const int each_frame = max_val_cmp(1, avg_fps / 60);
                     if(global_frame_counter % each_frame == 0) show_image_mat(show_img, "Demo");
@@ -333,16 +333,16 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             }
 
             // save video file
-            if (output_video_writer && show_img) {
+           /* if (output_video_writer && show_img) {
                 write_frame_cv(output_video_writer, show_img);
                 printf("\n cvWriteFrame \n");
-            }
+            }*/
 
             while (custom_atomic_load_int(&run_detect_in_thread)) {
                 if(avg_fps > 180) this_thread_yield();
                 else this_thread_sleep_for(thread_wait_ms);   // custom_join(detect_thread, 0);
             }
-            if (!benchmark) {
+           if (!benchmark) {
                 while (custom_atomic_load_int(&run_fetch_in_thread)) {
                     if (avg_fps > 180) this_thread_yield();
                     else this_thread_sleep_for(thread_wait_ms);   // custom_join(fetch_thread, 0);
@@ -358,7 +358,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             if (flag_exit == 1) break;
 
             if(delay == 0){
-                if(!benchmark) release_mat(&show_img);
+        //        if(!benchmark) release_mat(&show_img);
                 show_img = det_img;
             }
             det_img = in_img;
