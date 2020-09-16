@@ -14,8 +14,16 @@
 
 //for ROS
 #include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 
-
+#include<opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+//tarmy 
+using namespace cv;
+ cv::Mat *img_mynt=NULL;
+ cv::Mat frame;
 extern "C"
 {
 extern void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top);
@@ -434,10 +442,35 @@ void visualize(char *cfgfile, char *weightfile)
     wait_until_press_key_cv();
 #endif
 }
+//tarmy  
+void mynt_imgCB(const sensor_msgs::ImageConstPtr &msg)//想了用两个回调函数，中间隔一段时间的办法，但是并不能产生间隔的效果
+{
+    cv_bridge::CvImagePtr cv_ptr;
+    
+    static int imgnum=0;
+    try
+    {
+        cv_ptr=cv_bridge::toCvCopy(msg,sensor_msgs::image_encodings::BGR8);
+        frame=cv_ptr->image;
+	img_mynt=&frame;
+        ROS_INFO("now is %d",imgnum++);
+       // waitKey(30);
+    }
+    catch (cv_bridge::Exception &e)
+    {
+        ROS_ERROR("error:%s",e.what());
+        return ;
+    }
+}
 
 int main(int argc, char **argv)
 {
-ROS_INFO("hello tarmy");
+    ROS_INFO("hello tarmy");
+    //tarmy ros
+    ros::init(argc,argv,"motiondet");   
+    ros::NodeHandle nh;
+    ros::Subscriber sub = nh.subscribe("/cam0/image_raw", 1000, mynt_imgCB);
+
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     printf(" _DEBUG is used \n");

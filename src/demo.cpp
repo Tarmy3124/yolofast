@@ -19,7 +19,8 @@
 
 #include "http_stream.h"
 #include "image_opencv.h"
-//for ros
+//tarmy for ros
+#include <ros/ros.h>
 static char **demo_names;
 static image **demo_alphabet;
 static int demo_classes;
@@ -66,7 +67,8 @@ void *fetch_in_thread(void *ptr)
         if (letter_box)
             in_s = get_image_from_stream_letterbox(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
         else
-            in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
+         {   in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
+        printf("Stream OK\n");}
         if (!in_s.data) {
             printf("Stream closed.\n");
             custom_atomic_store_int(&flag_exit, 1);
@@ -248,15 +250,20 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     float avg_fps = 0;
     int frame_counter = 0;
     int global_frame_counter = 0;
+     //tarmy
+     ros::Rate loop_rate(10);
+     
 
-    while(1){
+    while(ros::ok()){
         ++count;
         {
             const float nms = .45;    // 0.4F
             int local_nboxes = nboxes;
             detection *local_dets = dets;
             this_thread_yield();
-
+            //tarmy
+            //ros::spinOnce();
+            //loop_rate.sleep();
             if (!benchmark) custom_atomic_store_int(&run_fetch_in_thread, 1); // if (custom_create_thread(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
             custom_atomic_store_int(&run_detect_in_thread, 1); // if (custom_create_thread(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
 
@@ -379,6 +386,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             }
         }
     }
+     /*          printf("break free!!!!!!!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     printf("input video stream closed. \n");
     if (output_video_writer) {
         release_video_writer(&output_video_writer);
@@ -411,7 +419,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     }
     free(alphabet);
     free_network(net);
-    //cudaProfilerStop();
+    //cudaProfilerStop();*/
 }
 //#else
 /*void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int cam_index, const char *filename, char **names, int classes, int avgframes,

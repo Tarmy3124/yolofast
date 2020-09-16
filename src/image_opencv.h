@@ -3,7 +3,7 @@
 
 #include "image.h"
 #include "matrix.h"
-
+//extern Mat *img_mynt;
 #ifdef __cplusplus
 extern "C" {
 #endif

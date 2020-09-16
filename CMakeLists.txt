@@ -10,16 +10,18 @@ list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-
+find_package(OpenCV 3.3.1 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
   roscpp
-  rospy
+  sensor_msgs
   std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 #find_package(STB REQUIRED)
-find_package(OpenCV 2.4.9 REQUIRED)
+
 find_package(Threads)
 
 
@@ -160,7 +162,9 @@ target_link_libraries(darknet
    #${PTREAD}
    ${catkin_LIBRARIES}
    ${CMAKE_THREAD_LIBS_INIT}
+
    ${OpenCV_LIBRARIES}
+
 )
 #############
 ## Install ##
