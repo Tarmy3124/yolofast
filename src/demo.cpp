@@ -1,3 +1,4 @@
+#include <iostream>
 #include "network.h"
 #include "detection_layer.h"
 #include "region_layer.h"
@@ -64,8 +65,8 @@ void *fetch_in_thread(void *ptr)
             this_thread_yield();
         }
         int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
-        if (letter_box)
-            in_s = get_image_from_stream_letterbox(cap, net.w, net.h, net.c, &in_img, dont_close_stream);
+       if (letter_box)
+            in_s = get_image_from_stream_letterbox(NULL, net.w, net.h, net.c, &in_img, dont_close_stream);
         else
          {   in_s = get_image_from_stream_resize(NULL, net.w, net.h, net.c, &in_img, dont_close_stream);
         printf("Stream OK\n");}
@@ -222,7 +223,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     int count = 0;
     if(!prefix && !dont_show){
         int full_screen = 0;
-        create_window_cv("Demo", full_screen, 1352, 1013);
+        //create_window_cv("Demo", full_screen, 1352, 1013);
     }
 
 
@@ -306,6 +307,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 if (!dont_show) {
                     const int each_frame = max_val_cmp(1, avg_fps / 60);
                     if(global_frame_counter % each_frame == 0) show_image_mat(show_img, "Demo");
+                    
+                    
                     int c = wait_key_cv(1);
                     if (c == 10) {
                         if (frame_skip == 0) frame_skip = 60;
@@ -358,7 +361,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             if (flag_exit == 1) break;
 
             if(delay == 0){
-        //        if(!benchmark) release_mat(&show_img);
+               //tarmy free
+              //  if(!benchmark) release_mat(&show_img);
                 show_img = det_img;
             }
             det_img = in_img;

@@ -480,7 +480,8 @@ extern "C" void show_image_mat(mat_cv *mat_ptr, const char *name)
     try {
         if (mat_ptr == NULL) return;
         cv::Mat &mat = *(cv::Mat *)mat_ptr;
-        cv::namedWindow(name, cv::WINDOW_NORMAL);
+      //  cv::namedWindow(name, cv::WINDOW_NORMAL);
+cv::namedWindow(name, cv::WINDOW_AUTOSIZE);
         cv::imshow(name, mat);
     }
     catch (...) {
@@ -797,10 +798,11 @@ extern "C" image get_image_from_stream_resize(cap_cv *cap, int w, int h, int c, 
     *(cv::Mat **)in_img = src;
 
    // cv::Mat new_img = cv::Mat(h, w, CV_8UC(1));
-    cv::Mat new_img = cv::Mat(650, 480, CV_8UC(1));
+    cv::Mat new_img = cv::Mat(320, 320, CV_8UC(1));
     cv::resize(*src, new_img, new_img.size(), 0, 0, cv::INTER_LINEAR);
     //if (c>1) cv::cvtColor(new_img, new_img, cv::COLOR_RGB2BGR);cv::COLOR_GRAY2RGB
-    //if (c>1) cv::cvtColor(new_img, new_img, cv::COLOR_GRAY2RGB);
+    //if (c>1) 
+    //cv::cvtColor(new_img, new_img, cv::COLOR_GRAY2BGR);
     image im = mat_to_image(new_img);
 
     //show_image_cv(im, "im");
@@ -813,9 +815,10 @@ extern "C" image get_image_from_stream_letterbox(cap_cv *cap, int w, int h, int 
 {
       //tarmy
 
-    c = c ? c : 3;
+    //c = c ? c : 3;
+    ros::spinOnce();
     cv::Mat *src = NULL;
-    static int once = 1;
+   /* static int once = 1;
     if (once) {
         once = 0;
         do {
@@ -826,17 +829,17 @@ extern "C" image get_image_from_stream_letterbox(cap_cv *cap, int w, int h, int 
         printf("Video stream: %d x %d \n", src->cols, src->rows);
     }
     else
-        src = (cv::Mat*)get_capture_frame_cv(cap);
-    if (!wait_for_stream(cap, src, dont_close)) return make_empty_image(0, 0, 0);   // passes (cv::Mat *)src while should be (cv::Mat **)src
-
-    *in_img = (mat_cv *)new cv::Mat(src->rows, src->cols, CV_8UC(c));
+        src = (cv::Mat*)get_capture_frame_cv(cap);*/
+    //if (!wait_for_stream(cap, src, dont_close)) return make_empty_image(0, 0, 0);   // passes (cv::Mat *)src while should be (cv::Mat **)src
+    src =img_mynt;
+    *in_img = (mat_cv *)new cv::Mat(src->rows, src->cols, CV_8UC(1));
     cv::resize(*src, **(cv::Mat**)in_img, (*(cv::Mat**)in_img)->size(), 0, 0, cv::INTER_LINEAR);
 
-    if (c>1) cv::cvtColor(*src, *src, cv::COLOR_RGB2BGR);
+    //if (c>1) cv::cvtColor(*src, *src, cv::COLOR_RGB2BGR);
     image tmp = mat_to_image(*src);
-    image im = letterbox_image(tmp, w, h);
-    free_image(tmp);
-    release_mat((mat_cv **)&src);
+    image im = letterbox_image(tmp, 300, 200);
+    //free_image(tmp);
+    //release_mat((mat_cv **)&src);
 
     //show_image_cv(im, "im");
     //show_image_mat(*in_img, "in_img");
@@ -889,11 +892,14 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
 {
     try {
         cv::Mat *show_img = (cv::Mat*)mat;
+
         int i, j;
         if (!show_img) return;
         static int frame_id = 0;
         frame_id++;
-
+        //tarmy
+        //printf("show_imgxxxxxxxxxxxxxx=%d\n", show_img->rows);
+        //printf("show_imgyyyyyyyyyyyyyy=%d", show_img->cols);
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
@@ -1004,6 +1010,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 //cvResetImageROI(copy_img);
 
                 cv::rectangle(*show_img, pt1, pt2, color, width, 8, 0);
+               // std::cout<<"pt1x位置"<<pt1.x<<"Y"<<pt1.y<<std::endl;
                 if (ext_output)
                     printf("\t(left_x: %4.0f   top_y: %4.0f   width: %4.0f   height: %4.0f)\n",
                     (float)left, (float)top, b.w*show_img->cols, b.h*show_img->rows);
