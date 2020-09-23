@@ -904,6 +904,8 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
             char labelstr[4096] = { 0 };
             int class_id = -1;
             for (j = 0; j < classes; ++j) {
+            //tarmy  only show detected people
+            if(strcmp(names[j], "person")!=0)continue;
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
                     if (class_id < 0) {
@@ -961,6 +963,8 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 int right = (b.x + b.w / 2.)*show_img->cols;
                 int top = (b.y - b.h / 2.)*show_img->rows;
                 int bot = (b.y + b.h / 2.)*show_img->rows;
+
+                //printf("top%d,  right%d",top,right);
 
                 if (left < 0) left = 0;
                 if (right > show_img->cols - 1) right = show_img->cols - 1;

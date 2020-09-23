@@ -33,7 +33,7 @@ static network net;
 static image in_s ;
 static image det_s;
 
-static cap_cv *cap;
+ cap_cv *cap;
 static float fps = 0;
 static float demo_thresh = 0;
 static int demo_ext_output = 0;
@@ -55,6 +55,9 @@ static int letter_box = 0;
 static const int thread_wait_ms = 1;
 static volatile int run_fetch_in_thread = 0;
 static volatile int run_detect_in_thread = 0;
+
+//tarmy 
+//extern cv::Mat *img_mynt;
 
 
 void *fetch_in_thread(void *ptr)
@@ -163,11 +166,12 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
     if(filename){
         printf("video file: %s\n", filename);
-        cap = get_capture_video_stream(filename);
+     //   cap = get_capture_video_stream(filename);
     }else{
         printf("Webcam index: %d\n", cam_index);
         cap = get_capture_webcam(1);
     }
+cap=NULL;
 
   /*  if (!cap) {
 #ifdef WIN32
@@ -281,14 +285,14 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             //printf("\nFPS:%.1f\n", fps);
             printf("Objects:\n\n");
 
-            ++frame_id;
+           /* ++frame_id;
             if (demo_json_port > 0) {
                 int timeout = 400000;
                 send_json(local_dets, local_nboxes, l.classes, demo_names, frame_id, demo_json_port, timeout);
-            }
+            }*/
 
             //char *http_post_server = "webhook.site/898bbd9b-0ddd-49cf-b81d-1f56be98d870";
-            if (http_post_host && !send_http_post_once) {
+          /*  if (http_post_host && !send_http_post_once) {
                 int timeout = 3;            // 3 seconds
                 int http_post_port = 80;    // 443 https, 80 http
                 if (send_http_post_request(http_post_host, http_post_port, filename,
@@ -296,14 +300,14 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 {
                     if (time_limit_sec > 0) send_http_post_once = 1;
                 }
-            }
+            }*/
 
             if (!benchmark && !dontdraw_bbox) draw_detections_cv_v3(show_img, local_dets, local_nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
             free_detections(local_dets, local_nboxes);
 
             printf("\nFPS:%.1f \t AVG_FPS:%.1f\n", fps, avg_fps);
 
-           if(!prefix){
+          if(!prefix){
                 if (!dont_show) {
                     const int each_frame = max_val_cmp(1, avg_fps / 60);
                     if(global_frame_counter % each_frame == 0) show_image_mat(show_img, "Demo");
@@ -328,12 +332,12 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             }
 
             // if you run it with param -mjpeg_port 8090  then open URL in your web-browser: http://localhost:8090
-            if (mjpeg_port > 0 && show_img) {
+         /*   if (mjpeg_port > 0 && show_img) {
                 int port = mjpeg_port;
                 int timeout = 400000;
                 int jpeg_quality = 40;    // 1 - 100
                 send_mjpeg(show_img, port, timeout, jpeg_quality);
-            }
+            }*/
 
             // save video file
            /* if (output_video_writer && show_img) {
@@ -362,13 +366,14 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
             if(delay == 0){
                //tarmy free
-              //  if(!benchmark) release_mat(&show_img);
+                //if(!benchmark) release_mat(&show_img);
                 show_img = det_img;
             }
             det_img = in_img;
             det_s = in_s;
         }
-        --delay;
+       //useless
+       /* --delay;
         if(delay < 0){
             delay = frame_skip;
 
@@ -388,14 +393,14 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 frame_counter = 0;
                 start_time = get_time_point();
             }
-        }
+        }*/
     }
-     /*          printf("break free!!!!!!!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("input video stream closed. \n");
-    if (output_video_writer) {
+     //          printf("break free!!!!!!!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+  // printf("input video stream closed. \n");
+   /* if (output_video_writer) {
         release_video_writer(&output_video_writer);
         printf("output_video_writer closed. \n");
-    }
+    }*/
 
     this_thread_sleep_for(thread_wait_ms);
 
@@ -423,7 +428,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     }
     free(alphabet);
     free_network(net);
-    //cudaProfilerStop();*/
+printf("release success. \n");
+    //cudaProfilerStop();
 }
 //#else
 /*void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int cam_index, const char *filename, char **names, int classes, int avgframes,

@@ -467,6 +467,7 @@ int main(int argc, char **argv)
 {
     ROS_INFO("hello tarmy");
     //tarmy ros
+    img_mynt=NULL;
     ros::init(argc,argv,"motiondet");   
     ros::NodeHandle nh;
     //ros::Subscriber sub = nh.subscribe("/cam0/image_raw", 1000, mynt_imgCB);
