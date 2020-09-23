@@ -16,7 +16,8 @@
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
-
+#include "rosmsg.hpp"
+#include <yolofast/DetsPersonPositon.h>
 #include<opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -462,7 +463,8 @@ void mynt_imgCB(const sensor_msgs::ImageConstPtr &msg)//想了用两个回调函
         return ;
     }
 }
-
+//tarmy define
+ros::Publisher dets_position_pub;
 int main(int argc, char **argv)
 {
     ROS_INFO("hello tarmy");
@@ -473,6 +475,8 @@ int main(int argc, char **argv)
     //ros::Subscriber sub = nh.subscribe("/cam0/image_raw", 1000, mynt_imgCB);
     ///mynteye/left/image_raw
     ///mynteye/left_rect/image_rect
+    //dets advertise
+    dets_position_pub = nh.advertise<yolofast::DetsPersonPositon>("DetsPersonPositonTx", 10);
     ros::Subscriber sub = nh.subscribe("/mynteye/left_rect/image_rect", 1000, mynt_imgCB);
 
 #ifdef _DEBUG

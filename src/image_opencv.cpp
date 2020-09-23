@@ -36,7 +36,12 @@
 #include <opencv2/core/version.hpp>
 #endif
 #include <ros/ros.h>
+#include <ros/console.h>
 //using namespace cv;
+
+
+//for ros
+#include "rosmsg.hpp"
 
 using std::cerr;
 using std::endl;
@@ -1012,8 +1017,16 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 //cvSetImageROI(copy_img, rect);
                 //cvSaveImage(image_name, copy_img, 0);
                 //cvResetImageROI(copy_img);
-
+                //tarmy dets_tx publish   
                 cv::rectangle(*show_img, pt1, pt2, color, width, 8, 0);
+                yolofast::DetsPersonPositonPtr dets_tx(new yolofast::DetsPersonPositon);
+                dets_tx->header.stamp = ros::Time::now();
+                dets_tx->header.frame_id = "world";
+                dets_tx->det_L=left;
+                dets_tx->det_R=right;
+                dets_tx->det_T=top;
+                dets_tx->det_B=bot;
+                dets_position_pub.publish(dets_tx);
                // std::cout<<"pt1x位置"<<pt1.x<<"Y"<<pt1.y<<std::endl;
                 if (ext_output)
                     printf("\t(left_x: %4.0f   top_y: %4.0f   width: %4.0f   height: %4.0f)\n",

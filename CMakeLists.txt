@@ -12,6 +12,7 @@ list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 ## is used, also find other catkin packages
 find_package(OpenCV 3.3.1 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   cv_bridge
   image_transport
   roscpp
@@ -55,14 +56,13 @@ find_package(Threads)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+    FILES
+    DetsPersonPositon.msg
+ )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
+#add_service_files(
 #   FILES
 #   Service1.srv
 #   Service2.srv
@@ -76,10 +76,10 @@ find_package(Threads)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -111,10 +111,8 @@ find_package(Threads)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES yolofast
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
+  CATKIN_DEPENDS
+  message_runtime
 )
 
 ###########
