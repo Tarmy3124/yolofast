@@ -587,6 +587,7 @@ extern "C" int show_image_cv(image im, const char* name, int ms)
 extern "C" cap_cv* get_capture_video_stream(const char *path) {
     cv::VideoCapture* cap = NULL;
     try {
+      //cap->release();
         cap = new cv::VideoCapture(path);
     }
     catch (...) {

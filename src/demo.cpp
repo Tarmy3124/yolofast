@@ -169,9 +169,10 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
      //   cap = get_capture_video_stream(filename);
     }else{
         printf("Webcam index: %d\n", cam_index);
-        cap = get_capture_webcam(1);
+     // cap.release();
+        //cap = get_capture_webcam(1);
     }
-cap=NULL;
+//cap=NULL;
 
   /*  if (!cap) {
 #ifdef WIN32
@@ -402,7 +403,7 @@ cap=NULL;
         printf("output_video_writer closed. \n");
     }*/
 
-    this_thread_sleep_for(thread_wait_ms);
+ /*   this_thread_sleep_for(thread_wait_ms);
 
     custom_join(detect_thread, 0);
     custom_join(fetch_thread, 0);
@@ -427,8 +428,8 @@ cap=NULL;
         free(alphabet[j]);
     }
     free(alphabet);
-    free_network(net);
-printf("release success. \n");
+    free_network(net);*/
+//printf("release success. \n");
     //cudaProfilerStop();
 }
 //#else
