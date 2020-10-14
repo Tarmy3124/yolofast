@@ -476,8 +476,9 @@ int main(int argc, char **argv)
     ///mynteye/left/image_raw
     ///mynteye/left_rect/image_rect
     //dets advertise
-    dets_position_pub = nh.advertise<yolofast::DetsPersonPositon>("DetsPersonPositonTx", 10);
-    ros::Subscriber sub = nh.subscribe("/mynteye/left_rect/image_rect", 1000, mynt_imgCB);
+    dets_position_pub = nh.advertise<yolofast::DetsPersonPositon>("yoloDetsTx", 10);
+    //ros::Subscriber sub = nh.subscribe("/mynteye/left_rect/image_rect", 1000, mynt_imgCB);
+    ros::Subscriber sub = nh.subscribe("/image_raw", 1000, mynt_imgCB);
 
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

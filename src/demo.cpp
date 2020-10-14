@@ -33,7 +33,7 @@ static network net;
 static image in_s ;
 static image det_s;
 
- cap_cv *cap;
+// cap_cv *cap;
 static float fps = 0;
 static float demo_thresh = 0;
 static int demo_ext_output = 0;
@@ -169,9 +169,10 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
      //   cap = get_capture_video_stream(filename);
     }else{
         printf("Webcam index: %d\n", cam_index);
-        cap = get_capture_webcam(1);
+      //  cap =
+     get_capture_webcam(3);
     }
-cap=NULL;
+//cap=NULL;
 
   /*  if (!cap) {
 #ifdef WIN32
@@ -402,16 +403,16 @@ cap=NULL;
         printf("output_video_writer closed. \n");
     }*/
 
-    this_thread_sleep_for(thread_wait_ms);
+  /*  this_thread_sleep_for(thread_wait_ms);
 
     custom_join(detect_thread, 0);
-    custom_join(fetch_thread, 0);
+    custom_join(fetch_thread, 0);*/
 
     // free memory
-    free_image(in_s);
-    free_detections(dets, nboxes);
+ //   free_image(in_s);
+   // free_detections(dets, nboxes);
 
-    demo_index = (avg_frames + demo_index - 1) % avg_frames;
+   /* demo_index = (avg_frames + demo_index - 1) % avg_frames;
     for (j = 0; j < avg_frames; ++j) {
             release_mat(&cv_images[j]);
     }
@@ -428,7 +429,7 @@ cap=NULL;
     }
     free(alphabet);
     free_network(net);
-printf("release success. \n");
+printf("release success. \n");*/
     //cudaProfilerStop();
 }
 //#else
