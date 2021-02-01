@@ -444,7 +444,7 @@ void visualize(char *cfgfile, char *weightfile)
 #endif
 }
 //tarmy  
-void mynt_imgCB(const sensor_msgs::ImageConstPtr &msg)//想了用两个回调函数，中间隔一段时间的办法，但是并不能产生间隔的效果
+void mynt_imgCB(const sensor_msgs::ImageConstPtr &msg)//处理相机话题
 {
     cv_bridge::CvImagePtr cv_ptr;
     
@@ -478,7 +478,11 @@ int main(int argc, char **argv)
     //dets advertise
     dets_position_pub = nh.advertise<yolofast::DetsPersonPositon>("yoloDetsTx", 10);
     //ros::Subscriber sub = nh.subscribe("/mynteye/left_rect/image_rect", 1000, mynt_imgCB);
-    ros::Subscriber sub = nh.subscribe("/image_raw", 1000, mynt_imgCB);
+    //for fsb
+    //ros::Subscriber sub = nh.subscribe("/image_raw", 1000, mynt_imgCB);
+    //for paper a p1
+    ///camera/color/image_raw
+    ros::Subscriber sub = nh.subscribe("/camera/color/image_raw", 1000, mynt_imgCB);    
 
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
