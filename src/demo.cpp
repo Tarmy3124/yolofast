@@ -170,7 +170,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     }else{
         printf("Webcam index: %d\n", cam_index);
       //  cap =
-     get_capture_webcam(0);
+     get_capture_webcam(3);
     }
 //cap=NULL;
 
